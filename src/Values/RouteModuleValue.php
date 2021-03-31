@@ -7,21 +7,22 @@ use Illuminate\Support\Arr;
 
 class RouteModuleValue
 {
-    private bool $extendNamespaceFromFolders;
-    private bool $extendPrefixFromFolders;
+    private bool $extendNamespaceFromFolders = true;
+    private bool $extendPrefixFromFolders = true;
 
-    private string $directory;
-    private string $namespace;
-    private string $prefix;
+    private $directory;
+    private $namespace;
+    private $prefix;
     private array $middleware;
 
     public function __construct(array $config)
     {
-        $this->extendNamespaceFromFolders = Arr::get($config, 'extendNamespaceFromFolders', true);
-        $this->extendPrefixFromFolders = Arr::get($config, 'extendPrefixFromFolders', true);
+        $this->extendNamespaceFromFolders = Arr::get($config, 'extendNamespaceFromFolders', $this->extendNamespaceFromFolders);
+        $this->extendPrefixFromFolders = Arr::get($config, 'extendPrefixFromFolders', $this->extendPrefixFromFolders);
+
         $this->namespace = Arr::get($config, 'namespace');
         $this->prefix = Arr::get($config, 'prefix');
-        $this->middleware = Arr::wrap(Arr::get($config, 'middleware', []));
+        $this->middleware = Arr::wrap(Arr::get($config, 'middleware'));
 
         if (Arr::has($config, 'directory')) {
             $this->directory = Arr::get($config, 'directory');
@@ -30,27 +31,27 @@ class RouteModuleValue
         }
     }
 
-    public function extendNamespaceFromFolders(): bool
+    public function extendNamespaceFromFolders()
     {
         return $this->extendNamespaceFromFolders;
     }
 
-    public function extendPrefixFromFolders(): bool
+    public function extendPrefixFromFolders()
     {
         return $this->extendPrefixFromFolders;
     }
 
-    public function getDirectory(): string
+    public function getDirectory()
     {
         return $this->directory;
     }
 
-    public function getNamespace(): string
+    public function getNamespace()
     {
         return $this->namespace;
     }
 
-    public function getPrefix(): string
+    public function getPrefix()
     {
         return $this->prefix;
     }

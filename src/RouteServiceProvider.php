@@ -68,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
     private function normalizePrefix(string $dirname): string
     {
         return $this
-            ->explodePath($this->namespace . DIRECTORY_SEPARATOR . $dirname)
+            ->explodePath($dirname)
             ->join(self::ROUTE_SEPARATOR);
     }
 
@@ -84,15 +84,20 @@ class RouteServiceProvider extends ServiceProvider
             foreach ($files as $file) {
                 $path = Str::replaceFirst(base_path(), null, $file->getRealPath());
 
-                $dirname = Str::replaceFirst('routes' . DIRECTORY_SEPARATOR, null, File::dirname($path));
+                $dirname = Str::replaceFirst('routes' . DIRECTORY_SEPARATOR . $routeConfig->getDirectory(), null, File::dirname($path));
 
-                $namespace = $routeConfig->extendNamespaceFromFolders() ? $this->normalizeNamespace($dirname) : null;
-                $prefix = $routeConfig->extendPrefixFromFolders() ? $this->normalizePrefix($dirname) : null;
+                $namespace = $routeConfig->extendNamespaceFromFolders()
+                    ? $this->normalizeNamespace($routeConfig->getNamespace() . DIRECTORY_SEPARATOR . $dirname)
+                    : $routeConfig->getNamespace();
+
+                $prefix = $routeConfig->extendPrefixFromFolders()
+                    ? $this->normalizePrefix($routeConfig->getPrefix() . self::ROUTE_SEPARATOR . $dirname)
+                    : $routeConfig->getPrefix();
 
                 $this->mapRoutes(
                     $path,
-                    $routeConfig->getNamespace() . DIRECTORY_SEPARATOR . $namespace,
-                    $routeConfig->getPrefix() . self::ROUTE_SEPARATOR . $prefix,
+                    $namespace,
+                    $prefix,
                     $routeConfig->getMiddleware()
                 );
             }
