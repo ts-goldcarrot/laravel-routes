@@ -3,6 +3,7 @@
 namespace GoldcarrotLaravel\Values;
 
 use GoldcarrotLaravel\Exceptions\InvalidConfigurationException;
+use Illuminate\Support\Arr;
 
 class RouteModuleValue
 {
