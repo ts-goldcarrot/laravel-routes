@@ -1,5 +1,5 @@
 {
-  "name": "ts-goldcarrot/laravel-base",
+  "name": "ts-goldcarrot/laravel-routes",
   "description": "Laravel routes helpers",
   "require": {
     "php": "^8.0",
