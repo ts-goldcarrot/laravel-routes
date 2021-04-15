@@ -50,6 +50,7 @@ class RouteServiceProvider extends ServiceProvider
 
     private function explodePath(string $path): Collection
     {
+        $path = str_replace('\\', '/', $path);
         $pieces = collect();
 
         while ($piece = basename($path)) {
